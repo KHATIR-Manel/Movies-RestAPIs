@@ -5,9 +5,16 @@ const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+const config = require('config');
 const app = express();
+
+if(!config.get('jwtPrivatekey')){
+    console.error('jwtPrivatekey is not definde !');
+    process.exit(1);
+}
 
 //Connect to the database
 mongoose.connect('mongodb://localhost/vidly', {
@@ -24,6 +31,7 @@ app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 //Port 
 const port = process.env.port || 3000;
 app.listen(port, () => {

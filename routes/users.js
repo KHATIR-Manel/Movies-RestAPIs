@@ -1,6 +1,7 @@
 const express = require('express');
 const { User, validate } = require('../models/user');
 const _ = require('lodash');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 
 //Get 
@@ -25,11 +26,14 @@ router.post('/', async (req, res) => {
     if (user) return res.status(400).send('User alreday registered');
 
     user = new User(_.pick(req.body, ['name','email','password']));
+
+    const salt = await bcrypt.genSalt(15);
+    user.password = await bcrypt.hash(user.password, salt);
     await user.save();
 
-    res.send(_.pick(user, ['_id','name', 'email']));
-    console.log("The user was posted successfully");
-
+    const token = user.generateAuthToken();
+    res.header('x-auth-token', token).send(_.pick(user, ['_id','name', 'email']));
+    console.log("The user was registered successfully");
 });
 
 module.exports = router;
