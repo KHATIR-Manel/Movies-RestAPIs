@@ -9,6 +9,7 @@ const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const app = express();
 
+//Connect to the database
 mongoose.connect('mongodb://localhost/vidly', {
     useNewUrlParser: true,
     useUnifiedTopology: true
