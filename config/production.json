@@ -1,0 +1,6 @@
+{
+    "name": "RestApi-Mongoose - Production",
+    "mail":{
+        "host":"Prod-mail-server"
+    }
+}

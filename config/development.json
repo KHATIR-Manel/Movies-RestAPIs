@@ -1,0 +1,6 @@
+{
+    "name": "RestApi-Mongoose - Development",
+    "mail":{
+        "host":"Dev-mail-server"
+    }
+}

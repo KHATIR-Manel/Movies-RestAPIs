@@ -1,0 +1,22 @@
+{
+  "name": "Movies-RestApi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "K.Manel",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.2.1",
+    "joi-objectid": "^3.0.1",
+    "lodash": "^4.17.20",
+    "mongoose": "^5.10.11",
+    "mongoose-transactions": "^1.1.4",
+    "nodemon": "^2.0.5"
+  }
+}
