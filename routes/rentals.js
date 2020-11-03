@@ -3,7 +3,8 @@ const { Rental, validate } = require('../models/rental');
 const { Customer } = require('../models/customer');
 const { Movie } = require('../models/movie');
 const Transaction = require('mongoose-transactions');
-
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const router = express.Router();
 const transaction = new Transaction();
 
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
     console.log("Success !");
 });
 //Post 
-router.post('/', async (req, res) => {
+router.post('/', [auth, admin] ,async (req, res) => {
     const { error } = await validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
 
 });
 //Update
-router.put('/:id', async (req, res) => {
+router.put('/:id', [auth, admin] , async (req, res) => {
     const { error } = await validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -86,7 +87,7 @@ router.put('/:id', async (req, res) => {
     console.log("The rental was updated successfully");
 });
 //Delete 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
     const rental = await Rental.findByIdAndDelete(req.params.id);
     if (!rental) return res.status(404).send('The rental with the given Id was not found');
 

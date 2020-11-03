@@ -5,7 +5,7 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 
-
+//Login 
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
     console.log("Successful login !");
 });
-
+//Validate email and password
 const validate = (user) => {
     const schema = Joi.object({
         email: Joi.string().min(5).max(255).required().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),

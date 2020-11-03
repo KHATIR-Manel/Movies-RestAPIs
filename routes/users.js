@@ -2,22 +2,29 @@ const express = require('express');
 const { User, validate } = require('../models/user');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
+//Getting the current user 
+router.get('/me', auth , async(req, res) => {
+const user = await User.findById(req.user._id).select('-password');
+res.send(user);
+});
+
 //Get 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const user = await User.find().sort('name');
     res.send(user);
     console.log("Success !");
 });
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth , async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).send('The user with the given Id was not found');
 
     res.send(user);
     console.log("The user " + user.name);
 });
-//Post 
+//Register
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
