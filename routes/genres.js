@@ -6,10 +6,14 @@ const router = express.Router();
 
 //Get 
 router.get('/', async (req, res) => {
-    const genres = await Genre.find().sort('name');
-
-    res.send(genres);
-    console.log("Success !");
+    try {
+        const genres = await Genre.find().sort('name');
+        res.send(genres);
+        console.log("Success !");
+    } catch (ex) {
+        //Log the exception
+        res.status(500).send('Something failed')
+    }
 });
 //Get 
 //look up at the genre
@@ -27,7 +31,7 @@ router.get('/:id', async (req, res) => {
 //Validate the genre
 //If invalide, return 400 - Bad request 
 //Else return the new genre
-router.post('/', [auth, admin] , async (req, res) => {
+router.post('/', [auth, admin], async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -45,7 +49,7 @@ router.post('/', [auth, admin] , async (req, res) => {
 //If invalide, return 400 - Bad request 
 //Else update the genre 
 //Return the updated genre
-router.put('/:id', [auth, admin] , async (req, res) => {
+router.put('/:id', [auth, admin], async (req, res) => {
     const genre = await Genre.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true });
     if (!genre) return res.status(404).send('The genere with the given Id was not found');
 
@@ -61,7 +65,7 @@ router.put('/:id', [auth, admin] , async (req, res) => {
 //If not existing, return 404 - Not found
 //Else delete the genre 
 //Return the deleted genre
-router.delete('/:id', [auth, admin] ,async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
     const genre = await Genre.findByIdAndDelete(req.params.id);
     if (!genre) return res.status(404).send('The genere with the given Id was not found');
 
