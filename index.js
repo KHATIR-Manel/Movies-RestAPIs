@@ -1,6 +1,5 @@
 //Handeling async errors in express routes handlers
 require('express-async-errors');
-require('winston-mongodb');
 const express = require("express");
 const mongoose = require("mongoose");
 const customers = require("./routes/customers");
@@ -14,6 +13,7 @@ Joi.objectId = require("joi-objectid")(Joi);
 const config = require("config");
 const error = require('./middleware/error');
 const winston = require('winston');
+require('winston-mongodb');
 const app = express();
 
 // process.on('uncaughtException', (ex) => {
