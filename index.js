@@ -1,3 +1,6 @@
+//Handeling async errors in express routes handlers
+require('express-async-errors');
+require('winston-mongodb');
 const express = require("express");
 const mongoose = require("mongoose");
 const customers = require("./routes/customers");
@@ -12,8 +15,18 @@ const config = require("config");
 const error = require('./middleware/error');
 const winston = require('winston');
 const app = express();
-//Handeling async errors in express routes handlers
-require('express-async-errors');
+
+process.on('uncaughtException',(ex) =>{
+
+});
+
+winston.configure({
+  transports: [
+    new winston.transports.File({ filename: 'logFile.log' })
+  ]
+});
+
+winston.add(new winston.transports.MongoDB({db:"mongodb://localhost/vidly", level:"error"}));
 
 if (!config.get("jwtPrivatekey")) {
   console.error("jwtPrivatekey is not definde !");
