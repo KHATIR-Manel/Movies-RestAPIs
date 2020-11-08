@@ -17,7 +17,8 @@ const winston = require('winston');
 const app = express();
 
 process.on('uncaughtException',(ex) =>{
-
+console.log('We got an uncaught exception');
+winston.error(ex.message,ex);
 });
 
 winston.configure({
@@ -27,6 +28,11 @@ winston.configure({
 });
 
 winston.add(new winston.transports.MongoDB({db:"mongodb://localhost/vidly", level:"error"}));
+
+const p = new Promise.reject(new Error('Something faild'));
+p.then(()=> console.log('Done'));
+
+//throw new Error('Something faild during startup');
 
 if (!config.get("jwtPrivatekey")) {
   console.error("jwtPrivatekey is not definde !");
@@ -50,7 +56,6 @@ app.use("/api/movies", movies);
 app.use("/api/rentals", rentals);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
-
 app.use(error);
 //Port
 const port = process.env.port || 3000;
