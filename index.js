@@ -16,6 +16,26 @@ const error = require('./middleware/error');
 const winston = require('winston');
 const app = express();
 
+// process.on('uncaughtException', (ex) => {
+//   console.log(ex);
+//   winston.error(ex.message, ex);
+//   process.exit(1);
+// });
+
+// process.on('unhandledRejection', (ex) => {
+//   console.log(ex);
+//   winston.error(ex.message, ex);
+//   process.exit(1);
+// });
+
+winston.handleExceptions(
+  new winston.transports.File({filename:'uncaughtException.log',handleExceptions: true})
+);
+
+process.on('unhandledRejection', (ex) => {
+console.log(ex);
+throw ex;
+});
 
 winston.configure({
   transports: [
@@ -24,19 +44,6 @@ winston.configure({
 });
 
 winston.add(new winston.transports.MongoDB({ db: "mongodb://localhost/vidly", level: "error" }));
-
-process.on('uncaughtException', (ex) => {
-  console.log(ex);
-  winston.error(ex.message, ex);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (ex) => {
-  console.log(ex);
-  winston.error(ex.message, ex);
-  process.exit(1);
-});
-
 
 const p = Promise.reject(new Error('Something faild'));
 p.then(() => console.log('Done'));
