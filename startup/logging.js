@@ -1,10 +1,9 @@
 const winston = require('winston');
 require('winston-mongodb');
 require('express-async-errors');
-require('../startup/logging');
 
 module.exports = function () {
-    
+
 // process.on('uncaughtException', (ex) => {
 //   console.log(ex);
 //   winston.error(ex.message, ex);
