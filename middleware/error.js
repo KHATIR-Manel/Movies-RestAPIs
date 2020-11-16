@@ -1,9 +1,8 @@
 const winston = require("winston");
 
 module.exports = function (err, req, res, next) {
-  //error
   winston.error(err.message, err);
-  
+  //To log the error
   const transport = new winston.transports.Console();
   const logger = winston.createLogger({
   transports: [transport],

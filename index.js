@@ -1,52 +1,16 @@
 //Handeling async errors in express routes handlers
 require('express-async-errors');
 const express = require("express");
-const mongoose = require("mongoose");
-const customers = require("./routes/customers");
-const genres = require("./routes/genres");
-const movies = require("./routes/movies");
-const rentals = require("./routes/rentals");
-const users = require("./routes/users");
-const auth = require("./routes/auth");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const config = require("config");
-const error = require('./middleware/error');
-const winston = require('winston');
-require('winston-mongodb');
+require('./startup/db')();
 const app = express();
+require('./startup/routes')(app);
 
-// process.on('uncaughtException', (ex) => {
-//   console.log(ex);
-//   winston.error(ex.message, ex);
-//   process.exit(1);
-// });
 
-// process.on('unhandledRejection', (ex) => {
-//   console.log(ex);
-//   winston.error(ex.message, ex);
-//   process.exit(1);
-// });
-
-winston.handleExceptions(
-  new winston.transports.File({filename:'uncaughtException.log',handleExceptions: true})
-);
-
-process.on('unhandledRejection', (ex) => {
-console.log(ex);
-throw ex;
-});
-
-winston.configure({
-  transports: [
-    new winston.transports.File({ filename: 'logFile.log', handleExceptions: true })
-  ]
-});
-
-winston.add(new winston.transports.MongoDB({ db: "mongodb://localhost/vidly", level: "error" }));
-
-const p = Promise.reject(new Error('Something faild'));
-p.then(() => console.log('Done'));
+//const p = Promise.reject(new Error('Something faild'));
+// p.then(() => console.log('Done'));
 
 //throw new Error('Something faild during startup');
 
@@ -55,24 +19,6 @@ if (!config.get("jwtPrivatekey")) {
   process.exit(1);
 }
 
-//Connect to the database
-mongoose
-  .connect("mongodb://localhost/vidly", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connect to Vidly"))
-  .catch((err) => console.error("Could not connect to Vidly", err.message));
-
-//Middleware
-app.use(express.json());
-app.use("/api/customers", customers);
-app.use("/api/genres", genres);
-app.use("/api/movies", movies);
-app.use("/api/rentals", rentals);
-app.use("/api/users", users);
-app.use("/api/auth", auth);
-app.use(error);
 //Port
 const port = process.env.port || 3000;
 app.listen(port, () => {
