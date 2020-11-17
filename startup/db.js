@@ -5,8 +5,9 @@ const mongoose = require("mongoose");
 module.exports = function () {
   mongoose
     .connect("mongodb://localhost/vidly", {
-      useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
+      useNewUrlParser: true
     })
     .then(() => winston.info("Connect to Vidly..."));
 };
