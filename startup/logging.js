@@ -3,16 +3,23 @@ const winston = require("winston");
 require("winston-mongodb");
 
 module.exports = function () {
-  process.on("unhandledRejection", (ex) => {
-    console.log(ex);
-    throw ex;
-  });
+  // process.on("unhandledRejection", (ex) => {
+  //   console.log(ex);
+  //   throw ex;
+  // });
 
   winston.configure({
     transports: [
+      new winston.transports.Console({
+        //To log the error in the console
+        level: "error",
+        colorize: true,
+        prettyPrint: true,
+      }),
       new winston.transports.File({
-        filename: "logFile.log",
         handleExceptions: true,
+        handleRejections: true,
+        filename: "logFile.log",
       }),
     ],
   });

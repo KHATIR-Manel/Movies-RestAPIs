@@ -16,8 +16,7 @@ app.listen(port, () => {
   //winston.info("Lesting to port " + port + "...");
 });
 
+//  const p = Promise.reject(new Error('Something faild'));
+//  p.then(() => console.log('Done'));
 
- const p = Promise.reject(new Error('Something faild'));
- p.then(() => console.log('Done'));
-
-//throw new Error('Something faild during startup');
+// throw new Error('Something faild during startup');
